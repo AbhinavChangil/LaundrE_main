@@ -26,6 +26,8 @@ import androidx.lifecycle.ViewModelProvider;
 import com.azhar.laundry.R;
 import com.azhar.laundry.utils.FunctionHelper;
 import com.azhar.laundry.viewmodel.AddDataViewModel;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
@@ -40,6 +42,7 @@ import im.delight.android.location.SimpleLocation;
 
 public class CuciBasahActivity extends AppCompatActivity {
 
+    
     public static final String DATA_TITLE = "TITLE";
     int hargaKaos = 1, hargaCelana = 1, hargaJaket = 1, hargaSprei = 1, hargaKarpet = 1;
     int itemCount1 = 0, itemCount2 = 0, itemCount3 = 0, itemCount4 = 0, itemCount5 = 0;
@@ -278,7 +281,16 @@ public class CuciBasahActivity extends AppCompatActivity {
             if (totalItems == 0 || totalPrice == 0) {
                 Toast.makeText(CuciBasahActivity.this, "Please choose the type of goods!", Toast.LENGTH_SHORT).show();
             } else {
-//                String text = "Shirt: "+itemCount1+"\n"+"Jeans: "+itemCount2+"\n"+"Jacket: "+itemCount3+"\n"+"BedSheet: "+itemCount4+"\n"+"Carpet: "+itemCount5+"\n"+"Total items: "+totalItems+"\n"+"Price: "+totalPrice;
+
+                String text = "Shirt: "+itemCount1+"\n"+"Jeans: "+itemCount2+"\n"+"Jacket: "+itemCount3+"\n"+"BedSheet: "+itemCount4+"\n"+"Carpet: "+itemCount5+"\n"+"Total items: "+totalItems+"\n"+"Price: "+totalPrice;
+
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                DatabaseReference myRef = database.getReference("message");
+
+                myRef.setValue(text);
+
+
+
 
                 String a = String.valueOf( itemCount1 );
                 String b = String.valueOf( itemCount2 );
