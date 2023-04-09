@@ -17,15 +17,23 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="s">
         <activity
+            android:name=".ScannerBarcodeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".PictureBarcodeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MainActivityScanner"
+            android:exported="false" />
+        <activity
             android:name=".SignInActivity"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".view.cucibasah.QrActivity"
             android:exported="false" />
@@ -46,9 +54,7 @@
             android:exported="true" />
         <activity
             android:name=".view.main.MainActivity"
-            android:exported="true">
-
-        </activity>
+            android:exported="true" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

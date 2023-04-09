@@ -26,8 +26,11 @@ import androidx.lifecycle.ViewModelProvider;
 import com.azhar.laundry.R;
 import com.azhar.laundry.utils.FunctionHelper;
 import com.azhar.laundry.viewmodel.AddDataViewModel;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.ktx.Firebase;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
@@ -37,6 +40,7 @@ import com.journeyapps.barcodescanner.BarcodeEncoder;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import im.delight.android.location.SimpleLocation;
 
@@ -284,10 +288,20 @@ public class CuciBasahActivity extends AppCompatActivity {
 
                 String text = "Shirt: "+itemCount1+"\n"+"Jeans: "+itemCount2+"\n"+"Jacket: "+itemCount3+"\n"+"BedSheet: "+itemCount4+"\n"+"Carpet: "+itemCount5+"\n"+"Total items: "+totalItems+"\n"+"Price: "+totalPrice;
 
+                FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference myRef = database.getReference("message");
+                DatabaseReference myRef = database.getReference( currentUser.getDisplayName() + "( "+currentUser.getUid()+" )"  );
 
                 myRef.setValue(text);
+
+
+
+
+//                FirebaseDatabase database = FirebaseDatabase.getInstance();
+//                DatabaseReference myRef = database.getReference("message1");
+//
+//                myRef.setValue(text);
 
 
 

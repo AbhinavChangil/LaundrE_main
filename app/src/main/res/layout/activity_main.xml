@@ -8,6 +8,7 @@
     android:orientation="vertical">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/tool"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
@@ -15,12 +16,23 @@
         app:elevation="0dp">
 
         <include
+            android:id="@+id/welcome"
             layout="@layout/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="15dp" />
 
+
     </com.google.android.material.appbar.AppBarLayout>
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:layout_marginLeft="20dp"
+        android:textColor="@color/gray"
+        android:textSize="16sp" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -112,16 +124,24 @@
                     android:src="@drawable/ic_shop" />
 
                 <TextView
+                    android:id="@+id/name_history"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginStart="20dp"
                     android:layout_marginEnd="20dp"
-                    android:text="Abhinav, Checkout your order history"
                     android:textColor="@color/white"
                     android:textSize="12sp" />
 
             </LinearLayout>
+
+            <Button
+                android:id="@+id/sign_out_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sign Out"
+                android:layout_marginTop="50dp"
+                android:layout_marginLeft="150dp"/>
 
         </LinearLayout>
 

@@ -1,6 +1,7 @@
 package com.azhar.laundry
 
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
@@ -8,7 +9,6 @@ import android.util.Log
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import com.azhar.laundry.R
 import com.azhar.laundry.*
 import com.azhar.laundry.daos.UserDao
 import com.azhar.laundry.view.main.MainActivity
@@ -145,17 +145,36 @@ class SignInActivity : AppCompatActivity() {
 
     }
 
+    @SuppressLint("SuspiciousIndentation")
     private fun updateUI(firebaseUser: FirebaseUser?) {
         if(firebaseUser != null) {
+
 
             val user = com.azhar.laundry.models.User(firebaseUser.uid,firebaseUser.displayName,firebaseUser.photoUrl.toString())
             val usersDao = UserDao()
             usersDao.adduser(user)
 
 
-            val mainActivityIntent = Intent(this, MainActivity::class.java)
-            startActivity(mainActivityIntent)
-            finish()
+
+            val name: String? = firebaseUser.displayName
+            val intent = Intent(this, MainActivity::class.java)
+            intent.putExtra("mytext", name)
+            startActivity(intent)
+
+
+            if(firebaseUser.displayName=="Abhinav Sen"){
+            val mainActivityIntent = Intent(this, MainActivityScanner::class.java)
+
+                startActivity(mainActivityIntent)
+                finish()
+            }
+            else{
+                val mainActivityIntent = Intent(this, MainActivity::class.java)
+
+                startActivity(mainActivityIntent)
+                finish()
+            }
+
 
         } else {
             signInButton.visibility = View.VISIBLE

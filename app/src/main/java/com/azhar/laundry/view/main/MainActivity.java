@@ -1,6 +1,9 @@
 package com.azhar.laundry.view.main;
 
+import static com.firebase.ui.auth.ui.phone.SubmitConfirmationCodeFragment.TAG;
+
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -8,10 +11,14 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+import com.azhar.laundry.models.*;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,9 +36,20 @@ import com.azhar.laundry.view.history.HistoryActivity;
 import com.azhar.laundry.view.ironing.IroningActivity;
 import com.azhar.laundry.view.premiumwash.PremiumWashActivity;
 import com.azhar.laundry.viewmodel.MainViewModel;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.ktx.Firebase;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,25 +57,43 @@ import im.delight.android.location.SimpleLocation;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
 
+
     int REQ_PERMISSION = 100;
     double strCurrentLatitude;
     double strCurrentLongitude;
     String strCurrentLocation;
+
+    GoogleSignInClient googleSignInClient;
     GoogleMap mapsView;
     SimpleLocation simpleLocation;
     ProgressDialog progressDialog;
     MainViewModel mainViewModel;
     MenuAdapter menuAdapter;
+
     MainAdapter mainAdapter;
     ModelMenu modelMenu;
     RecyclerView rvMenu, rvRekomendasi;
     LinearLayout layoutHistory;
     List<ModelMenu> modelMenuList = new ArrayList<>();
 
+
+    @SuppressLint({"SetTextI18n", "RestrictedApi"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+//        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+
+
+        TextView mTextview = findViewById(R.id.name_history);
+        TextView Name = findViewById(R.id.name);
+//        mTextview.setText(getIntent().getStringExtra("mytext"));
+        mTextview.setText( currentUser.getDisplayName().toString()+", Checkout your order history!");
+        Name.setText( currentUser.getDisplayName() );
+
 
         setStatusbar();
         setPermission();
@@ -65,6 +101,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         setInitLayout();
         setMenu();
 //        getLocationViewModel();
+
     }
 
     private void setLocation() {
@@ -87,6 +124,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         rvRekomendasi = findViewById(R.id.rvRekomendasi);
         layoutHistory = findViewById(R.id.layoutHistory);
 
+    Button sign_out = findViewById( R.id.sign_out_btn );
+
         progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Please wait…");
         progressDialog.setCancelable(false);
@@ -104,7 +143,24 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             Intent intent = new Intent(MainActivity.this, HistoryActivity.class);
             startActivity(intent);
         });
+
+
+//        sign_out.setOnClickListener(v -> {
+//            FirebaseAuth.getInstance().signOut();
+////            finish();
+////            System.exit( 0 );
+//
+//
+//
+//        });
+
     }
+
+
+
+
+
+
 
     private void setPermission() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
